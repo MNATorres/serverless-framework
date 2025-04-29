@@ -1,4 +1,11 @@
-const aws = require("aws-sdk")
+const {
+    DynamoDBDocument
+} = require('@aws-sdk/lib-dynamodb');
+
+const {
+    DynamoDB
+} = require('@aws-sdk/client-dynamodb');
+
 const { randomUUID } = require("crypto")
 
 let dynamoDBClientParams = {}
@@ -12,7 +19,7 @@ if (process.env.IS_OFFLINE) {
     }
 }
 
-const dynamodb = new aws.DynamoDB.DocumentClient(dynamoDBClientParams)
+const dynamodb = DynamoDBDocument.from(new DynamoDB(dynamoDBClientParams))
 
 const createUsers = async (event, context) => {
 
@@ -29,13 +36,13 @@ const createUsers = async (event, context) => {
 
     console.log(params.Item)
 
-    return dynamodb.put(params).promise().then(res => {
+    return dynamodb.put(params).then(res => {
         console.log(res)
         return {
             "statusCode": 200,
             "body": JSON.stringify({ 'user': params.Item})
         }
-    })
+    });
 }
 
 module.exports = {

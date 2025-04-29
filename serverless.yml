@@ -12,7 +12,7 @@ provider:
 
 plugins:
   - serverless-offline
-  - serverless-dynamodb-local
+  - serverless-dynamodb
 
 
 package:

@@ -1,4 +1,10 @@
-const aws = require("aws-sdk")
+const {
+    DynamoDBDocument
+} = require('@aws-sdk/lib-dynamodb');
+
+const {
+    DynamoDB
+} = require('@aws-sdk/client-dynamodb');
 
 let dynamoDBClientParams = {}
 
@@ -11,7 +17,7 @@ if (process.env.IS_OFFLINE) {
     }
 }
 
-const dynamodb = new aws.DynamoDB.DocumentClient(dynamoDBClientParams)
+const dynamodb = DynamoDBDocument.from(new DynamoDB(dynamoDBClientParams))
 
 const getUsers = async (event, context) => {
 
@@ -23,13 +29,13 @@ const getUsers = async (event, context) => {
         TableName: 'usersTable'
     };
 
-    return dynamodb.query(params).promise().then(res => {
+    return dynamodb.query(params).then(res => {
         console.log(res)
         return {
             "statusCode": 200,
             "body": JSON.stringify({ 'user': res})
         }
-    })
+    });
 }
 
 module.exports = {
